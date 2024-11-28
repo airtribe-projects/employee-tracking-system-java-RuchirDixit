@@ -10,5 +10,10 @@ public class EmployeeController {
 	public String demo() {
 		return "hello, from demo!";
 	}
+	
+	@GetMapping("/hey")
+	public String demo1() {
+		return "hello, from demo!";
+	}
 
 }
