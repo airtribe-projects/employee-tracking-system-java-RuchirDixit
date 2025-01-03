@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class EmployeeService {
@@ -120,5 +121,41 @@ public class EmployeeService {
             return "Employee not found";
         }
         return "Employee deleted successfully";
+    }
+
+    public List<Employee> search(String firstName, String email, Long departmentId) {
+        return employeeRepository.findAll((root,query,cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if(firstName!=null){
+                predicates.add(cb.like(root.get("name"),"%" + firstName + "%"));
+            }
+            // Search by email
+            if (email != null) {
+                predicates.add(cb.equal(root.get("email"), email));
+            }
+
+            // Search by department ID
+            if (departmentId != null) {
+                predicates.add(cb.equal(root.get("department").get("id"), departmentId));
+            }
+
+            // Combine all predicates with 'AND' logic
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
+    }
+
+    public List<Employee> fetchUnassignedEmployeesToProjects() {
+        List<Employee> allEmloyees = employeeRepository.findAll();
+        List<Employee> unassignedEmployees = new ArrayList<>();
+        for(Employee employee : allEmloyees){
+            if(employee.getProjects().isEmpty()){
+                unassignedEmployees.add(employee);
+            }
+        }
+        return unassignedEmployees;
+    }
+
+    public List<Employee> getEmployeeProjects(Long projectId) {
+        return employeeRepository.findByProjects_Id(projectId);
     }
 }

@@ -19,6 +19,7 @@ public class ProjectService {
     public String saveProject(ProjectModel project) {
         Project newProject = new Project();
         newProject.setProjectName(project.getProjectName());
+        newProject.setBudget(project.getBudget());
         projectRepository.save(newProject);
         return "Project saved";
     }

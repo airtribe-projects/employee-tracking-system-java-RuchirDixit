@@ -39,4 +39,27 @@ public class EmployeeController {
         String response = employeeService.deleteEmployee(id);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/search")
+    public List<Employee> searchEmployees(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Long departmentId) {
+        return employeeService.search(firstName, email, departmentId);
+    }
+
+    //API to search employee not assigned to any project
+    @GetMapping("/employee/unassigned")
+    public ResponseEntity<List<Employee>> unassignedEmployeesToProjects() {
+        List<Employee> employees = employeeService.fetchUnassignedEmployeesToProjects();
+        return ResponseEntity.ok(employees);
+    }
+
+
+    //API to search employees working on specific project
+    @GetMapping("/employee/project/{id}")
+    public ResponseEntity<List<Employee>> getEmployeeProjects(@PathVariable Long id) {
+        List<Employee> employees = employeeService.getEmployeeProjects(id);
+        return ResponseEntity.ok(employees);
+    }
 }

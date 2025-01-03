@@ -40,4 +40,10 @@ public class DepartmentController {
         String response = departmentService.updateDepartment(id,updatedDepartment);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/budget/{departmentId}")
+    public ResponseEntity<String> getBudget(@PathVariable Long departmentId) {
+        String response = departmentService.getBudgetForProjectsInDepartment(departmentId);
+        return ResponseEntity.ok(response);
+    }
 }

@@ -30,6 +30,8 @@ public class Project {
     @JsonIgnore
     private List<Employee> employees;
 
+    private Double budget;
+
     // every project belong to only one department
     @ManyToOne
     @JoinColumn(name = "department_id")

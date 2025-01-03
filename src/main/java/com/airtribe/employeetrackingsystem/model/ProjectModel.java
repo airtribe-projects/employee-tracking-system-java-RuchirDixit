@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class ProjectModel {
     private String projectName;
+    private Double budget;
 }
