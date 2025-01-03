@@ -3,11 +3,12 @@ package com.airtribe.employeetrackingsystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Data
-public class Roles {
+public class Roles implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
