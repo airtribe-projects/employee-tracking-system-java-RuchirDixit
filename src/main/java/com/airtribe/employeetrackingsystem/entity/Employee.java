@@ -60,4 +60,19 @@ public class Employee implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
     private List<Project> projects;
+
+    public Employee() {
+
+    }
+
+    public Employee(Long id, String name, String email, String username, String password, List<Roles> roles, Department department, List<Project> projects) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.department = department;
+        this.projects = projects;
+    }
 }

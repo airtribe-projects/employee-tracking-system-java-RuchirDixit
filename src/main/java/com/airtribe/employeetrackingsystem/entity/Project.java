@@ -38,4 +38,16 @@ public class Project implements Serializable {
     @JoinColumn(name = "department_id")
     @JsonIgnore
     private Department department;
+
+    public Project(){
+
+    }
+
+    public Project(Long id, String projectName, List<Employee> employees, Double budget, Department department) {
+        this.id = id;
+        this.projectName = projectName;
+        this.employees = employees;
+        this.budget = budget;
+        this.department = department;
+    }
 }

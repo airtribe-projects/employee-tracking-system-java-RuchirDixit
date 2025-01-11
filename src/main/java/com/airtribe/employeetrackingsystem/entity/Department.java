@@ -35,4 +35,14 @@ public class Department implements Serializable {
     @JsonIgnore
     private List<Project> projectsInDepartment;
 
+    public Department(){
+
+    }
+
+    public Department(Long id, String departmentName, List<Employee> employeesInDepartment, List<Project> projectsInDepartment) {
+        this.id = id;
+        this.departmentName = departmentName;
+        this.employeesInDepartment = employeesInDepartment;
+        this.projectsInDepartment = projectsInDepartment;
+    }
 }
