@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EmployeeService {
@@ -85,15 +89,18 @@ public class EmployeeService {
 //        return null;
 //    }
 
+    @CacheEvict(value = "employeesCache", allEntries = true)
     public String saveEmployee(Employee employee){
         employeeRepository.save(employee);
         return "Employee saved successfully";
     }
 
+    @Cacheable(value = "employeesCache")
     public List<Employee> fetchAllEmployees() {
         return employeeRepository.findAll();
     }
 
+    @CacheEvict(value = "employeesCache", key = "#id")
     public String updateEmployee(Long id, @Valid Employee updatedEmployee) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if(employee.isPresent()){
@@ -112,6 +119,7 @@ public class EmployeeService {
         return "Employee updated successfully";
     }
 
+    @CacheEvict(value = "employeesCache", key = "#id")
     public String deleteEmployee(Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if(employee.isPresent()){
@@ -123,6 +131,7 @@ public class EmployeeService {
         return "Employee deleted successfully";
     }
 
+    @Cacheable(value = "employeeSearchCache", key = "{#firstName, #email, #departmentId}")
     public List<Employee> search(String firstName, String email, Long departmentId) {
         return employeeRepository.findAll((root,query,cb) -> {
             List<Predicate> predicates = new ArrayList<>();

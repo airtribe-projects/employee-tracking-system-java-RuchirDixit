@@ -4,6 +4,8 @@ import com.airtribe.employeetrackingsystem.entity.Employee;
 import com.airtribe.employeetrackingsystem.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +25,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employees = employeeService.fetchAllEmployees();
-        return ResponseEntity.ok(employees);
+    public List<Employee> getAllEmployees() {
+        return employeeService.fetchAllEmployees();
     }
 
     @PutMapping("/employee/{id}")

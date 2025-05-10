@@ -5,6 +5,8 @@ import com.airtribe.employeetrackingsystem.model.ProjectModel;
 import com.airtribe.employeetrackingsystem.repository.ProjectRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @CacheEvict(value = "projectCache", allEntries = true)
     public String saveProject(ProjectModel project) {
         Project newProject = new Project();
         newProject.setProjectName(project.getProjectName());
@@ -24,10 +27,12 @@ public class ProjectService {
         return "Project saved";
     }
 
+    @Cacheable(value = "projectCache")
     public List<Project> fetchAllProjects() {
         return projectRepository.findAll();
     }
 
+    @CacheEvict(value = "projectCache", key = "#id")
     public String deleteProjectById(Long id) {
         Optional<Project> project = projectRepository.findById(id);
         if(project.isPresent()) {
@@ -39,6 +44,7 @@ public class ProjectService {
         return "Project deleted";
     }
 
+    @CacheEvict(value = "projectCache", key = "#id")
     public String updateProject(Long id, Project updatedProject) {
         Optional<Project> project = projectRepository.findById(id);
         if(project.isPresent()) {

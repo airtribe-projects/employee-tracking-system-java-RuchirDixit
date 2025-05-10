@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Project {
+public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -37,4 +38,16 @@ public class Project {
     @JoinColumn(name = "department_id")
     @JsonIgnore
     private Department department;
+
+    public Project(){
+
+    }
+
+    public Project(Long id, String projectName, List<Employee> employees, Double budget, Department department) {
+        this.id = id;
+        this.projectName = projectName;
+        this.employees = employees;
+        this.budget = budget;
+        this.department = department;
+    }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.CollectionTable;
@@ -21,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Data
-public class Employee {
+public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,7 +41,7 @@ public class Employee {
     @Length (min = 8)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "employee_roles",
     joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
@@ -52,11 +53,26 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_project",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
     private List<Project> projects;
+
+    public Employee() {
+
+    }
+
+    public Employee(Long id, String name, String email, String username, String password, List<Roles> roles, Department department, List<Project> projects) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.department = department;
+        this.projects = projects;
+    }
 }

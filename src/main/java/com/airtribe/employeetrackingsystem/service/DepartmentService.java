@@ -7,6 +7,8 @@ import com.airtribe.employeetrackingsystem.repository.DepartmentRepository;
 import com.airtribe.employeetrackingsystem.repository.ProjectRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class DepartmentService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @CacheEvict(value = "departmentCache", allEntries = true)
     public String saveDepartment(@Valid DepartmentModel department) {
         Department newDepartment = new Department();
         newDepartment.setDepartmentName(department.getDepartmentName());
@@ -44,10 +47,12 @@ public class DepartmentService {
         return "Department saved successfully";
     }
 
+    @Cacheable(value = "departmentCache")
     public List<Department> fetchAllDepartments() {
         return departmentRepository.findAll();
     }
 
+    @CacheEvict(value = "departmentCache", key = "#id")
     public String deleteDepartmentById(Long id) {
         Optional<Department> department = departmentRepository.findById(id);
         if (department.isPresent()) {
@@ -59,6 +64,7 @@ public class DepartmentService {
         return "Department deleted successfully";
     }
 
+    @CacheEvict(value = "departmentCache", key = "#id")
     public String updateDepartment(Long id,Department updatedDepartment) {
         Optional<Department> department = departmentRepository.findById(id);
         if (department.isPresent()) {
