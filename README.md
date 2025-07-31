@@ -79,7 +79,7 @@ The Employee Tracking System is a Spring Boot-based RESTful API for managing emp
 
 ## Prerequisites
 1. Java 17+
-2. Gradle
+2. Maven
 3. Spring Boot 3+
 4. Database (e.g., MySQL or PostgreSQL)
 5. Spring Security for RBAC
